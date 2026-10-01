@@ -72,13 +72,15 @@ repositories {
     //Most dependencies are mirrored to the VS Maven, so by default only it is included alongside mavenLocal and KFF.
     mavenLocal()
     maven {
-        name = "Valkyrien Skies Internal"
-        url = 'https://maven.valkyrienskies.org'
-    }
-    maven {
         name = 'Kotlin for Forge'
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
         content { includeGroup "thedarkcolour" }
+    }
+
+    // Make sure this one is last in the list
+    maven {
+        name = "Valkyrien Skies Internal"
+        url = 'https://maven.valkyrienskies.org'
     }
 }
 

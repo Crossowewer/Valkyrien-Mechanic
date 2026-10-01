@@ -3,10 +3,11 @@
   "minVersion": "0.8",
   "package": "com.crossower.valkyrien_mechanic.mixin",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "valkyrien_mechanic.refmap.json",
+  "refmap": "mixins.valkyrien_mechanic.refmap.json",
   "mixins": [
   ],
   "client": [
+    "MixinMinecraft"
   ],
   "injectors": {
     "defaultRequire": 1
