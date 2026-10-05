@@ -1,0 +1,28 @@
+{
+  "multipart": [
+    {
+      "when": { "facing": "north" },
+      "apply": { "model": "valkyrien_mechanic:block/thruster" }
+    },
+    {
+      "when": { "facing": "east" },
+      "apply": { "model": "valkyrien_mechanic:block/thruster", "y": 90 }
+    },
+    {
+      "when": { "facing": "south" },
+      "apply": { "model": "valkyrien_mechanic:block/thruster", "y": 180 }
+    },
+    {
+      "when": { "facing": "west" },
+      "apply": { "model": "valkyrien_mechanic:block/thruster", "y": 270 }
+    },
+    {
+      "when": { "facing": "up" },
+      "apply": { "model": "valkyrien_mechanic:block/thruster", "x": -90 }
+    },
+    {
+      "when": { "facing": "down" },
+      "apply": { "model": "valkyrien_mechanic:block/thruster", "x": 90 }
+    }
+  ]
+}

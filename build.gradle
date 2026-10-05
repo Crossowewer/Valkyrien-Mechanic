@@ -22,6 +22,7 @@ plugins {
     id 'com.matthewprenger.cursegradle' version '1.4.0'
     id "com.modrinth.minotaur" version "2.4.5"
     id "com.github.johnrengelman.shadow" version "7.1.2"
+    id "org.jetbrains.kotlin.kapt" version '2.0.0'
 }
 
 java {
@@ -82,6 +83,7 @@ repositories {
         name = "Valkyrien Skies Internal"
         url = 'https://maven.valkyrienskies.org'
     }
+    mavenCentral()
 }
 
 
@@ -119,6 +121,7 @@ dependencies {
     compileOnly("org.joml:joml:1.10.4")
     compileOnly("org.joml:joml-primitives:1.10.0")
     modImplementation "thedarkcolour:kotlinforforge:4.11.0"
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
     // endregion
 
     // Create
