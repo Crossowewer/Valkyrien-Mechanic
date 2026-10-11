@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "powered=false": { "model": "valkyrien_mechanic:block/switch_off" },
+    "powered=true":  { "model": "valkyrien_mechanic:block/switch_on" }
+  }
+}

@@ -20,6 +20,11 @@ public class ModBlockEntities
                     () -> BlockEntityType.Builder.of(ThrusterBlockEntity::new, ModBlocks.THRUSTER.get())
                             .build(null));
 
+    public static final RegistryObject<BlockEntityType<SwitchBlockEntity>> SWITCH_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("switch_block_entity",
+                    () -> BlockEntityType.Builder.of(SwitchBlockEntity::new, ModBlocks.SWITCH.get())
+                            .build(null));
+
     public static void register(IEventBus eventBus)
     {
         BLOCK_ENTITIES.register(eventBus);

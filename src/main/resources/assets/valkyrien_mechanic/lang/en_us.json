@@ -2,6 +2,7 @@
   "item.valkyrien_mechanic.connector_tool": "Connector tool",
 
   "block.valkyrien_mechanic.thruster": "Thruster",
+  "block.valkyrien_mechanic.switch": "Switch",
 
   "creativetab.mechanic_tab": "Valkyrien Mechanic"
 }

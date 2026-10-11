@@ -1,0 +1,8 @@
+{
+  "switch_click": {
+    "subtitlesz": "sounds.switch",
+    "sounds": [
+      "valkyrien_mechanic:switch"
+    ]
+  }
+}

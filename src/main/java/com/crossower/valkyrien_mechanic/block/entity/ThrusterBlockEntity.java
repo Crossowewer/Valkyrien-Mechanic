@@ -1,8 +1,8 @@
 package com.crossower.valkyrien_mechanic.block.entity;
 
-import com.mojang.logging.LogUtils;
+import com.crossower.valkyrien_mechanic.block.ConnectionSystem;
+import com.crossower.valkyrien_mechanic.block.PortBlockEntity;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -13,13 +13,18 @@ import org.valkyrienskies.core.api.world.PhysLevel;
 import org.valkyrienskies.mod.api.BlockEntityPhysicsListener;
 import org.valkyrienskies.mod.common.util.VectorConversionsMCKt;
 
-import org.slf4j.Logger;
+import java.util.List;
 
 import static com.crossower.valkyrien_mechanic.block.custom.ThrusterBlock.FACING;
 import static com.crossower.valkyrien_mechanic.block.custom.ThrusterBlock.POWER;
 
-public class ThrusterBlockEntity extends BlockEntity implements BlockEntityPhysicsListener
+public class ThrusterBlockEntity extends PortBlockEntity implements BlockEntityPhysicsListener
 {
+
+    private static final List<ConnectionSystem.Port> PORTS = List.of(new ConnectionSystem.Port(0, ConnectionSystem.PortType.INPUT, 0.5f,0.5f, 0.5f));
+
+    @Override
+    public List<ConnectionSystem.Port> getPorts() { return PORTS; }
 
     public ThrusterBlockEntity(BlockPos pos, BlockState blockState)
     {
@@ -39,7 +44,6 @@ public class ThrusterBlockEntity extends BlockEntity implements BlockEntityPhysi
         Vector3d force = VectorConversionsMCKt.toJOMLD(getBlockState().getValue(FACING).getNormal());
                 force.mul(thrustForce); // multiply direction by your strength
         physShip.applyModelForce(force, VectorConversionsMCKt.toJOML(worldPosition.getCenter()));
-        Vec3i jdsfsd = getBlockState().getValue(FACING).getNormal();
     }
     @Override
     public void setDimension(@NotNull String s)

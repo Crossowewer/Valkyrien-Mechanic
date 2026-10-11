@@ -28,9 +28,9 @@ public class ThrusterFlameRenderer implements BlockEntityRenderer<BlockEntity>
         BlockState blockState = blockEntity.getBlockState();
         Direction direction = blockState.getValue(ThrusterBlock.FACING).getOpposite();
 
-        if (ConnectorRenderer.isToolActive())
+        if (ConnectionRenderer.isToolActive())
         {
-            ConnectorRenderer.submit(poseStack, 0.5f, 0.5f, 0.5f, 0xFF3296FF);
+            ConnectionRenderer.submitPorts(poseStack, blockEntity);
         }
 
         int power = blockState.getValue(ThrusterBlock.POWER);
@@ -45,10 +45,10 @@ public class ThrusterFlameRenderer implements BlockEntityRenderer<BlockEntity>
 
         float len = (0.4f + power / 15f * 1.2f) * (1f + 0.1f * Mth.sin(blockEntity.getLevel().getGameTime() + partialTick * 2f));
 
-        drawPlane(vc, poseStack.last().pose(), 0.25f, len);
+        drawPlane(vc, poseStack.last().pose(), 0.35f, len);
 
         poseStack.mulPose(Axis.YP.rotationDegrees(90));
-        drawPlane(vc, poseStack.last().pose(), 0.25f, len);
+        drawPlane(vc, poseStack.last().pose(), 0.35f, len);
 
         poseStack.popPose();
     }

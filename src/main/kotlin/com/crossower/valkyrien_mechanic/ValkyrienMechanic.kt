@@ -10,6 +10,7 @@ import com.crossower.valkyrien_mechanic.ValkyrienMechanic.Companion.MOD_ID
 import com.crossower.valkyrien_mechanic.block.ModBlocks
 import com.crossower.valkyrien_mechanic.block.entity.ModBlockEntities
 import com.crossower.valkyrien_mechanic.item.ModItems
+import com.crossower.valkyrien_mechanic.sound.ModSounds
 import net.minecraftforge.common.MinecraftForge
 
 
@@ -22,6 +23,7 @@ class ValkyrienMechanic {
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
+        ModSounds.register(modEventBus);
 
         modEventBus.addListener(::init)
         if (FMLEnvironment.dist.isClient) {
@@ -29,8 +31,8 @@ class ValkyrienMechanic {
             modEventBus.addListener(ValkyrienMechanicClient.Companion::registerRenderers)
             modEventBus.addListener(ValkyrienMechanicClient.Companion::registerOverlays)
             MinecraftForge.EVENT_BUS.addListener(ValkyrienMechanicClient.Companion::onRenderLevelStage)
-            MinecraftForge.EVENT_BUS.addListener(ValkyrienMechanicClient.Companion::onClienTick)
             MinecraftForge.EVENT_BUS.addListener(ValkyrienMechanicClient.Companion::onInteractionKey)
+            MinecraftForge.EVENT_BUS.addListener(ValkyrienMechanicClient.Companion::onMouseButton)
         }
     }
 
@@ -43,6 +45,7 @@ class ValkyrienMechanic {
             vsApi.physTickEvent.on {
 
             }
+            event.enqueueWork { ModNetwork.register() }
         }
     }
 }
