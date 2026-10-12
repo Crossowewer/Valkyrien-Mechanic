@@ -107,7 +107,13 @@ public class ConnectionSystem
             PortRef in = aIsInput ? a : b, out = aIsInput ? b : a;
             ConnectableBlockEntity inBe = aIsInput ? ca : cb;
 
-            inBe.getLinks().set(in.id(), out.pos().subtract(in.pos()), out.id());
+            BlockPos offset = out.pos().subtract(in.pos());
+            ConnectionSystem.PortLinks.Link existing = inBe.getLinks().all().get(in.id());
+
+            if (existing != null && existing.offset().equals(offset) && existing.sourcePort() == out.id())
+                inBe.getLinks().remove(in.id());
+            else
+                inBe.getLinks().set(in.id(), offset, out.id());
             inBe.onLinksChanged();
         }
 

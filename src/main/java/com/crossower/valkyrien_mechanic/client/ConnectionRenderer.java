@@ -109,7 +109,7 @@ public final class ConnectionRenderer
     public static void renderOverlay(ForgeGui gui, GuiGraphics g, float partialTick, int w, int h)
     {
         PORTS.sort(Comparator.comparingDouble(ScreenPort::depth).reversed());
-        for (LinkLine line : LINKS) drawWorldLine(g, line.a(), line.b(), w, h, 2f, line.argb());
+        for (LinkLine line : LINKS) drawWorldLine(g, line.a(), line.b(), w, h, line.argb());
         ConnectionSystem.PortRef from = ConnectorClient.getDragFrom();
         if (from == null) dragSourceWorld = null;
 
@@ -118,12 +118,14 @@ public final class ConnectionRenderer
             float[] src = projectWorld(dragSourceWorld, w, h);
             float tx = w / 2f, ty = h / 2f;
             int color = dragSourceColor;
+            float t1 = lineThickness(-viewSpace(dragSourceWorld).z, h);
+            float t2 = t1;
             if (hovered != null && !hovered.ref().equals(from)) {
                 tx = hovered.x(); ty = hovered.y();
                 color = lighten(color, 0.35f);
-
+                t2 = lineThickness(hovered.depth, h);
             }
-            drawLine(g, src[0], src[1], tx, ty, 2f, color);
+            drawLine(g, src[0], src[1], tx, ty, t1, t2, color);
         }
 
 
@@ -170,11 +172,11 @@ public final class ConnectionRenderer
         RenderSystem.disableBlend();
     }
 
-    public static void drawLine(GuiGraphics gui, float x1, float y1, float x2, float y2, float thickness,int argb) {
+    public static void drawLine(GuiGraphics gui, float x1, float y1, float x2, float y2, float t1, float t2, int argb) {
         float dx = x2 - x1, dy = y2 - y1;
         float length = (float) Math.sqrt(dx * dx + dy * dy);
         if (length < 0.5f) return;
-        float nx = -dy / length * thickness / 2f, ny = dx / length * thickness / 2f;
+        float nx = -dy / length / 2f, ny = dx / length / 2f;
 
         float a = (argb >>> 24 & 255) / 255f, r = (argb >>> 16 & 255) / 255f,
                 gr = (argb >>> 8 & 255) / 255f, b = (argb & 255) / 255f;
@@ -186,10 +188,10 @@ public final class ConnectionRenderer
 
         BufferBuilder buf = Tesselator.getInstance().getBuilder();
         buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        buf.vertex(m, x1 + nx, y1 + ny, 0).color(r, gr, b, a).endVertex();
-        buf.vertex(m, x2 + nx, y2 + ny, 0).color(r, gr, b, a).endVertex();
-        buf.vertex(m, x2 - nx, y2 - ny, 0).color(r, gr, b, a).endVertex();
-        buf.vertex(m, x1 - nx, y1 - ny, 0).color(r, gr, b, a).endVertex();
+        buf.vertex(m, x1 + nx * t1, y1 + ny * t1, 0).color(r, gr, b, a).endVertex();
+        buf.vertex(m, x2 + nx * t2, y2 + ny * t2, 0).color(r, gr, b, a).endVertex();
+        buf.vertex(m, x2 - nx * t2, y2 - ny * t2, 0).color(r, gr, b, a).endVertex();
+        buf.vertex(m, x1 - nx * t1, y1 - ny * t1, 0).color(r, gr, b, a).endVertex();
         BufferUploader.drawWithShader(buf.end());
         RenderSystem.disableBlend();
     }
@@ -255,6 +257,11 @@ public final class ConnectionRenderer
                     link.offset().getX() + out.x(),
                     link.offset().getY() + out.y(),
                     link.offset().getZ() + out.z());
+            ConnectionSystem.PortRef dragFrom = ConnectorClient.getDragFrom();
+            if (dragFrom != null && dragFrom.equals(new ConnectionSystem.PortRef(srcPos, out.id()))) {
+                dragSourceWorld = b;
+                dragSourceColor = out.type().color;
+            }
             LINKS.add(new LinkLine(a, b, out.type().color));
         }
     }
@@ -268,7 +275,7 @@ public final class ConnectionRenderer
     private record LinkLine(Vec3 a, Vec3 b, int argb) {}
     private static final List<LinkLine> LINKS = new ArrayList<>();
 
-    private static void drawWorldLine(GuiGraphics g, Vec3 wa, Vec3 wb, int w, int h, float thickness, int argb)
+    private static void drawWorldLine(GuiGraphics g, Vec3 wa, Vec3 wb, int w, int h, int argb)
     {
         Vector4f a = viewSpace(wa), b = viewSpace(wb);
         final float near = -0.1f;
@@ -276,7 +283,7 @@ public final class ConnectionRenderer
         if (a.z > near) a = clip(a, b, near); else if (b.z > near) b = clip(b, a, near);
 
         float[] pa = toScreen(a, w, h), pb = toScreen(b, w, h);
-        drawLine(g, pa[0], pa[1], pb[0], pb[1], thickness, argb);
+        drawLine(g, pa[0], pa[1], pb[0], pb[1], lineThickness(-a.z, h), lineThickness(-b.z, h), argb);
     }
 
     private static Vector4f viewSpace(Vec3 p)
@@ -292,5 +299,14 @@ public final class ConnectionRenderer
     private static float[] toScreen(Vector4f v, int w, int h) {
         Vector4f c = new Vector4f(v).mul(PROJ);
         return new float[]{(c.x / c.w * 0.5f + 0.5f) * w, (0.5f - c.y / c.w * 0.5f) * h};
+    }
+
+    private static final float LINE_WORLD_WIDTH = 0.05f;
+    private static final float LINE_MIN = 0.8f;
+    private static final float LINE_MAX = 15f;
+
+    private static float lineThickness(float depth, int h) {
+        float px = LINE_WORLD_WIDTH * PROJ.m11() / Math.max(depth, 0.1f) * h * 0.5f;
+        return Mth.clamp(px, LINE_MIN, LINE_MAX);
     }
 }
