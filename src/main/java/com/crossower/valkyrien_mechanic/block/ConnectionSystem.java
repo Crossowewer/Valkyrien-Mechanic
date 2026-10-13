@@ -4,6 +4,7 @@ import com.crossower.valkyrien_mechanic.item.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
@@ -24,7 +25,16 @@ public class ConnectionSystem
         PortType(int color) {this.color = color;}
     }
 
-    public record Port(int id, PortType type, float x, float y, float z) {
+    public enum SignalType {
+        LOGIC,
+        NUMBER;
+
+        public boolean canFeed(SignalType input) {
+            return this == input || (this == LOGIC && input == NUMBER);
+        }
+    }
+
+    public record Port(int id, PortType type, SignalType signal, float x, float y, float z) {
 
     }
 
@@ -32,6 +42,8 @@ public class ConnectionSystem
         List<Port> getPorts();
 
         PortLinks getLinks();
+
+        float getOutput(int portId);
 
         void onLinksChanged();
     }
@@ -104,6 +116,11 @@ public class ConnectionSystem
             if (pa == null ||  pb == null || pa.type() == pb.type()) return;
 
             boolean aIsInput = pa.type() == PortType.INPUT;
+
+            Port inPort = aIsInput ? pa : pb;
+            Port outPort = aIsInput ? pb : pa;
+            if (!outPort.signal().canFeed(inPort.signal())) return;
+
             PortRef in = aIsInput ? a : b, out = aIsInput ? b : a;
             ConnectableBlockEntity inBe = aIsInput ? ca : cb;
 

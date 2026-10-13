@@ -2,7 +2,9 @@ package com.crossower.valkyrien_mechanic.block.entity;
 
 import com.crossower.valkyrien_mechanic.block.ConnectionSystem;
 import com.crossower.valkyrien_mechanic.block.PortBlockEntity;
+import com.crossower.valkyrien_mechanic.block.custom.ThrusterBlock;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -17,11 +19,12 @@ import java.util.List;
 
 import static com.crossower.valkyrien_mechanic.block.custom.ThrusterBlock.FACING;
 import static com.crossower.valkyrien_mechanic.block.custom.ThrusterBlock.POWER;
+import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 
 public class ThrusterBlockEntity extends PortBlockEntity implements BlockEntityPhysicsListener
 {
 
-    private static final List<ConnectionSystem.Port> PORTS = List.of(new ConnectionSystem.Port(0, ConnectionSystem.PortType.INPUT, 0.5f,0.5f, 0.5f));
+    private static final List<ConnectionSystem.Port> PORTS = List.of(new ConnectionSystem.Port(0, ConnectionSystem.PortType.INPUT, ConnectionSystem.SignalType.LOGIC, 0.5f,0.5f, 0.5f));
 
     @Override
     public List<ConnectionSystem.Port> getPorts() { return PORTS; }
@@ -50,4 +53,22 @@ public class ThrusterBlockEntity extends PortBlockEntity implements BlockEntityP
     {
 
     }
-}
+
+    private int signalPower = 0;
+
+    @Override protected void onInputChanged(int portId, float value) {
+        if (portId != 0) return;
+        signalPower = value > 0.5f ? 15 : 0;
+        updatePower();
+    }
+
+    public void updatePower()
+    {
+        if (level == null || level.isClientSide) return;
+        int target = Math.max(level.getBestNeighborSignal(worldPosition), signalPower);
+        BlockState state = getBlockState();
+        if (state.getValue(ThrusterBlock.POWER) != target) {
+            level.setBlock(worldPosition, state.setValue(ThrusterBlock.POWER, target), Block.UPDATE_ALL);
+        }
+    }
+ }

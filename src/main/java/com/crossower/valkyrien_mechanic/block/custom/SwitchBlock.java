@@ -63,4 +63,5 @@ public class SwitchBlock extends Block implements EntityBlock
         level.gameEvent(player, newState.getValue(POWERED) ? GameEvent.BLOCK_ACTIVATE : GameEvent.BLOCK_DEACTIVATE, pos);
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
+
 }

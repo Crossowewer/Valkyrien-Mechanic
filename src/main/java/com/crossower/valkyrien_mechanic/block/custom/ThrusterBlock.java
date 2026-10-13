@@ -1,5 +1,6 @@
 package com.crossower.valkyrien_mechanic.block.custom;
 
+import com.crossower.valkyrien_mechanic.block.PortBlockEntity;
 import com.crossower.valkyrien_mechanic.block.entity.ModBlockEntities;
 import com.crossower.valkyrien_mechanic.block.entity.ThrusterBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -19,6 +20,8 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -70,14 +73,9 @@ public class ThrusterBlock extends Block implements EntityBlock
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean isMoving)
     {
-        if (!level.isClientSide())
+        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof ThrusterBlockEntity thruster)
         {
-            int currentRedstoneSignal = state.getValue(POWER);
-            int incomingRedstoneSignal = level.getBestNeighborSignal(pos);
-            if(currentRedstoneSignal != incomingRedstoneSignal) {
-
-                level.setBlock(pos, state.setValue(POWER, incomingRedstoneSignal), Block.UPDATE_ALL);
-            }
+            thruster.updatePower();
         }
         super.neighborChanged(state, level, pos, neighborBlock, neighborPos, isMoving);
     }
@@ -138,6 +136,10 @@ public class ThrusterBlock extends Block implements EntityBlock
     {
         super.createBlockStateDefinition(builder);
         builder.add(FACING, POWER);
+    }
+
+    @Override public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return PortBlockEntity.serverTicker(level);
     }
 
 }
