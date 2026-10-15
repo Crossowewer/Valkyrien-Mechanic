@@ -43,7 +43,7 @@ public class ThrusterBlockEntity extends PortBlockEntity implements BlockEntityP
     @Override
     public void physTick(@Nullable PhysShip physShip, @NotNull PhysLevel physLevel) {
         if (physShip == null) return;
-        double thrustForce = 1000 * getBlockState().getValue(POWER);
+        double thrustForce = 1000 * Math.pow(1.5, getBlockState().getValue(POWER) - 1);
         Vector3d force = VectorConversionsMCKt.toJOMLD(getBlockState().getValue(FACING).getNormal());
                 force.mul(thrustForce); // multiply direction by your strength
         physShip.applyModelForce(force, VectorConversionsMCKt.toJOML(worldPosition.getCenter()));

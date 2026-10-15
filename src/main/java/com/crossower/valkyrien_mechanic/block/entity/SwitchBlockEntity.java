@@ -3,10 +3,7 @@ package com.crossower.valkyrien_mechanic.block.entity;
 import com.crossower.valkyrien_mechanic.block.ConnectionSystem;
 import com.crossower.valkyrien_mechanic.block.PortBlockEntity;
 import com.crossower.valkyrien_mechanic.block.custom.SwitchBlock;
-import net.minecraft.client.renderer.texture.Tickable;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;

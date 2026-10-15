@@ -78,6 +78,9 @@ class ValkyrienMechanicClient {
             event.registerBlockEntityRenderer(ModBlockEntities.SWITCH_BLOCK_ENTITY.get()) { context ->
                 PortsRenderer(context)
             }
+            event.registerBlockEntityRenderer(ModBlockEntities.LOGIC_BUTTON_BLOCK_ENTITY.get()) { context ->
+                PortsRenderer(context)
+            }
         }
 
         @JvmStatic

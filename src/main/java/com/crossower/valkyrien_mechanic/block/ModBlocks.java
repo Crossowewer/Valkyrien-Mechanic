@@ -1,6 +1,7 @@
 package com.crossower.valkyrien_mechanic.block;
 
 import com.crossower.valkyrien_mechanic.ValkyrienMechanic;
+import com.crossower.valkyrien_mechanic.block.custom.LogicButtonBlock;
 import com.crossower.valkyrien_mechanic.block.custom.SwitchBlock;
 import com.crossower.valkyrien_mechanic.block.custom.ThrusterBlock;
 import com.crossower.valkyrien_mechanic.block.custom.ThrusterDummyBlock;
@@ -28,6 +29,8 @@ public class ModBlocks
             () -> new ThrusterDummyBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).noOcclusion().noLootTable()));
     public static final RegistryObject<Block> SWITCH = register("switch",
             () -> new SwitchBlock(BlockBehaviour.Properties.copy(Blocks.LEVER)));
+    public static final RegistryObject<Block> BUTTON = register("button",
+            () -> new LogicButtonBlock(BlockBehaviour.Properties.copy(Blocks.LEVER)));
 
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block)
     {

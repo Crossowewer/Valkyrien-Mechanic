@@ -3,6 +3,7 @@
 
   "block.valkyrien_mechanic.thruster": "Thruster",
   "block.valkyrien_mechanic.switch": "Switch",
+  "block.valkyrien_mechanic.button": "Button",
 
   "creativetab.mechanic_tab": "Valkyrien Mechanic"
 }
