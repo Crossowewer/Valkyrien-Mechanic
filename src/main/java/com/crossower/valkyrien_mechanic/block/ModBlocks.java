@@ -1,15 +1,13 @@
 package com.crossower.valkyrien_mechanic.block;
 
 import com.crossower.valkyrien_mechanic.ValkyrienMechanic;
-import com.crossower.valkyrien_mechanic.block.custom.LogicButtonBlock;
-import com.crossower.valkyrien_mechanic.block.custom.SwitchBlock;
-import com.crossower.valkyrien_mechanic.block.custom.ThrusterBlock;
-import com.crossower.valkyrien_mechanic.block.custom.ThrusterDummyBlock;
+import com.crossower.valkyrien_mechanic.block.custom.*;
 import com.crossower.valkyrien_mechanic.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -31,6 +29,8 @@ public class ModBlocks
             () -> new SwitchBlock(BlockBehaviour.Properties.copy(Blocks.LEVER)));
     public static final RegistryObject<Block> BUTTON = register("button",
             () -> new LogicButtonBlock(BlockBehaviour.Properties.copy(Blocks.LEVER)));
+    public static final RegistryObject<Block> BEARING = register("bearing",
+            () -> new BearingBlock(BlockBehaviour.Properties.of().noOcclusion().noCollission().strength(0.35f, 20f).sound(SoundType.COPPER)));
 
     private static <T extends Block> RegistryObject<T> register(String name, Supplier<T> block)
     {

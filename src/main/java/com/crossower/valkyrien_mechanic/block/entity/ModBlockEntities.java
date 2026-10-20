@@ -2,6 +2,7 @@ package com.crossower.valkyrien_mechanic.block.entity;
 
 import com.crossower.valkyrien_mechanic.ValkyrienMechanic;
 import com.crossower.valkyrien_mechanic.block.ModBlocks;
+import com.crossower.valkyrien_mechanic.block.custom.BearingBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -27,6 +28,11 @@ public class ModBlockEntities
     public static final RegistryObject<BlockEntityType<LogicButtonBlockEntity>> LOGIC_BUTTON_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("logic_button_block_entity",
                     () -> BlockEntityType.Builder.of(LogicButtonBlockEntity::new, ModBlocks.BUTTON.get())
+                            .build(null));
+
+    public static final RegistryObject<BlockEntityType<BearingBlockEntity>> BEARING_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("bearing_block_entity",
+                    () -> BlockEntityType.Builder.of(BearingBlockEntity::new, ModBlocks.BEARING.get())
                             .build(null));
 
     public static void register(IEventBus eventBus)

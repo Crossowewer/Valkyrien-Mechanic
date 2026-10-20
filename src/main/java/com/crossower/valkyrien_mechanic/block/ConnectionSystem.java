@@ -29,7 +29,7 @@ public class ConnectionSystem
         NUMBER;
 
         public boolean canFeed(SignalType input) {
-            return this == input || (this == LOGIC && input == NUMBER);
+            return this == input;
         }
     }
 
