@@ -20,12 +20,12 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
+import org.joml.Vector3d;
 import org.joml.Vector4f;
+import org.valkyrienskies.core.api.ships.Ship;
+import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class ConnectionRenderer
 {
@@ -68,6 +68,7 @@ public final class ConnectionRenderer
         hovered = null;
         hoveredDistance = Float.MAX_VALUE;
         LINKS.clear();
+        RENDERED.clear();
     }
 
     public static void submit(PoseStack poseStack, BlockPos pos, int id, float lx, float ly, float lz, int argb)
@@ -75,12 +76,15 @@ public final class ConnectionRenderer
         Vector4f p = new Vector4f(lx, ly, lz, 1.0f);
         p.mul(poseStack.last().pose());
 
-        ConnectionSystem.PortRef dragFrom = ConnectorClient.getDragFrom();
-        if (dragFrom != null && dragFrom.equals(new ConnectionSystem.PortRef(pos, id))) {
-            Vector4f wv = new Vector4f(p).mul(INV_VIEW);
-            dragSourceWorld = new Vec3(cameraPos.x + wv.x, cameraPos.y + wv.y, cameraPos.z + wv.z);
+        Vector4f wv = new Vector4f(p).mul(INV_VIEW);
+        Vec3 worldPos = new Vec3(cameraPos.x + wv.x, cameraPos.y + wv.y, cameraPos.z + wv.z);
+        ConnectionSystem.PortRef ref = new ConnectionSystem.PortRef(pos, id);
+        RENDERED.put(ref, worldPos);
+        if(ref.equals(ConnectorClient.getDragFrom())) {
+            dragSourceWorld = worldPos;
             dragSourceColor = argb;
         }
+
         p.mul(RenderSystem.getProjectionMatrix());
         if (p.w <= 0f) return;
 
@@ -109,7 +113,12 @@ public final class ConnectionRenderer
     public static void renderOverlay(ForgeGui gui, GuiGraphics g, float partialTick, int w, int h)
     {
         PORTS.sort(Comparator.comparingDouble(ScreenPort::depth).reversed());
-        for (LinkLine line : LINKS) drawWorldLine(g, line.a(), line.b(), w, h, line.argb());
+        for (LinkLine line : LINKS)
+        {
+            Vec3 a = RENDERED.getOrDefault(line.inRef(), line.fallbackA());
+            Vec3 b = RENDERED.getOrDefault(line.srcRef(), line.fallbackB());
+            drawWorldLine(g, a, b, w, h, line.argb());
+        }
         ConnectionSystem.PortRef from = ConnectorClient.getDragFrom();
         if (from == null) dragSourceWorld = null;
 
@@ -235,7 +244,7 @@ public final class ConnectionRenderer
     public static void submitPorts(PoseStack poseStack, BlockEntity blockEntity) {
         if (!isToolActive() || !(blockEntity instanceof ConnectionSystem.ConnectableBlockEntity c)) return;
         for (Port port : c.getPorts()) {
-            submit(poseStack, blockEntity.getBlockPos(), port.id(), port.x(), port.y(), port.z(), port.type().color);
+            submit(poseStack, blockEntity.getBlockPos(), port.id(), port.x(), port.y(), port.z(), port.signal().color);
         }
         submitLinks(poseStack, blockEntity, c);
     }
@@ -244,26 +253,30 @@ public final class ConnectionRenderer
     {
         Level level = be.getLevel();
         if (level == null) return;
-        for (Map.Entry<Integer, ConnectionSystem.PortLinks.Link> entry : c.getLinks().all().entrySet()) {
+        for (Map.Entry<Integer, ConnectionSystem.PortLinks.Link> entry : c.getLinks().all().entrySet())
+        {
             ConnectionSystem.PortLinks.Link link = entry.getValue();
             Port in = ConnectionSystem.portById(c.getPorts(), entry.getKey());
-            BlockPos srcPos = be.getBlockPos().offset(link.offset());
+            BlockPos srcPos = link.resolve(be.getBlockPos());
             if (in == null || !(level.getBlockEntity(srcPos) instanceof ConnectionSystem.ConnectableBlockEntity src)) continue;
             Port out = ConnectionSystem.portById(src.getPorts(), link.sourcePort());
             if (out == null) continue;
 
-            Vec3 a = toWorld(poseStack, in.x(), in.y(), in.z());
-            Vec3 b = toWorld(poseStack,
-                    link.offset().getX() + out.x(),
-                    link.offset().getY() + out.y(),
-                    link.offset().getZ() + out.z());
-            ConnectionSystem.PortRef dragFrom = ConnectorClient.getDragFrom();
-            if (dragFrom != null && dragFrom.equals(new ConnectionSystem.PortRef(srcPos, out.id()))) {
-                dragSourceWorld = b;
-                dragSourceColor = out.type().color;
-            }
-            LINKS.add(new LinkLine(a, b, out.type().color));
+            LINKS.add(new LinkLine(
+                    new ConnectionSystem.PortRef(be.getBlockPos(), in.id()),
+                    new ConnectionSystem.PortRef(srcPos, out.id()),
+                    toWorld(poseStack, in.x(), in.y(), in.z()),
+                    worldOfPort(level, srcPos, out),
+                    out.signal().color));
         }
+    }
+
+    private static Vec3 worldOfPort(Level level, BlockPos blockPos, Port port)
+    {
+        Vector3d p = new Vector3d(blockPos.getX() + port.x(), blockPos.getY() + port.y(), blockPos.getZ() + port.z());
+        Ship ship = VSGameUtilsKt.getShipManagingPos(level, blockPos);
+        if (ship != null) p = ship.getTransform().getShipToWorld().transformPosition(p);
+        return new Vec3(p.x, p.y, p.z);
     }
 
     private static Vec3 toWorld(PoseStack poseStack, float lx, float ly, float lz)
@@ -272,8 +285,10 @@ public final class ConnectionRenderer
         return new  Vec3(cameraPos.x + v.x,cameraPos.y +  v.y, cameraPos.z + v.z);
     }
 
-    private record LinkLine(Vec3 a, Vec3 b, int argb) {}
+    private record LinkLine(ConnectionSystem.PortRef inRef, ConnectionSystem.PortRef srcRef,
+                            Vec3 fallbackA, Vec3 fallbackB, int argb) {}
     private static final List<LinkLine> LINKS = new ArrayList<>();
+    private static final Map<ConnectionSystem.PortRef, Vec3> RENDERED = new HashMap<>();
 
     private static void drawWorldLine(GuiGraphics g, Vec3 wa, Vec3 wb, int w, int h, int argb)
     {

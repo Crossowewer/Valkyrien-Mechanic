@@ -13,7 +13,7 @@ public class ModItems
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ValkyrienMechanic.MOD_ID);
 
     public static final RegistryObject<Item> CONNECTOR_TOOL = ITEMS.register("connector_tool",
-            () -> new ConnectorToolItem(new Item.Properties()));
+            () -> new ConnectorToolItem(new Item.Properties().stacksTo(1)));
 
     public static void register(IEventBus eventBus)
     {

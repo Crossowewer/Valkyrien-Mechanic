@@ -2,12 +2,10 @@ package com.crossower.valkyrien_mechanic.client;
 
 import com.crossower.valkyrien_mechanic.LinkPacket;
 import com.crossower.valkyrien_mechanic.ModNetwork;
+import com.crossower.valkyrien_mechanic.PortUsePacket;
 import com.crossower.valkyrien_mechanic.block.ConnectionSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraftforge.fml.common.Mod;
-
-import java.util.logging.Level;
 
 public final class ConnectorClient
 {
@@ -48,7 +46,7 @@ public final class ConnectorClient
     public static void onRightPress(ConnectionRenderer.ScreenPort hovered)
     {
         if (dragFrom != null) {dragFrom = null; return;}
-        if (hovered != null) ModNetwork.CHANNEL.sendToServer(new LinkPacket(hovered.ref(), null));
+        if (hovered != null) ModNetwork.CHANNEL.sendToServer(new PortUsePacket(hovered.ref()));
     }
 
 
@@ -67,10 +65,14 @@ public final class ConnectorClient
     private static ConnectionSystem.PortRef connectedSource(ConnectionSystem.PortRef pressed)
     {
         ClientLevel level = Minecraft.getInstance().level;
-        if (level != null && level.getBlockEntity(pressed.pos()) instanceof ConnectionSystem.ConnectableBlockEntity be) {
+        if (level != null && level.getBlockEntity(pressed.pos()) instanceof ConnectionSystem.ConnectableBlockEntity be)
+        {
+            ConnectionSystem.Port port = ConnectionSystem.portById(be.getPorts(),  pressed.id());
+            if (port == null || port.type() != ConnectionSystem.PortType.INPUT) return null;
+
             ConnectionSystem.PortLinks.Link link = be.getLinks().all().get(pressed.id());
             if (link != null) {
-                return new ConnectionSystem.PortRef(pressed.pos().offset(link.offset()), link.sourcePort());
+                return new ConnectionSystem.PortRef(link.resolve(pressed.pos()), link.sourcePort());
             }
         }
         return null;

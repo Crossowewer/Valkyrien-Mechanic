@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,power_vis=0": {
+      "model": "valkyrien_mechanic:block/gas_engine_0"
+    },
+    "facing=east,power_vis=0": {
+      "model": "valkyrien_mechanic:block/gas_engine_0",
+      "y": 90
+    },
+    "facing=south,power_vis=0": {
+      "model": "valkyrien_mechanic:block/gas_engine_0",
+      "y": 180
+    },
+    "facing=west,power_vis=0": {
+      "model": "valkyrien_mechanic:block/gas_engine_0",
+      "y": 270
+    },
+    "facing=north,power_vis=1": {
+      "model": "valkyrien_mechanic:block/gas_engine_1"
+    },
+    "facing=east,power_vis=1": {
+      "model": "valkyrien_mechanic:block/gas_engine_1",
+      "y": 90
+    },
+    "facing=south,power_vis=1": {
+      "model": "valkyrien_mechanic:block/gas_engine_1",
+      "y": 180
+    },
+    "facing=west,power_vis=1": {
+      "model": "valkyrien_mechanic:block/gas_engine_1",
+      "y": 270
+    },
+    "facing=north,power_vis=2": {
+      "model": "valkyrien_mechanic:block/gas_engine_2"
+    },
+    "facing=east,power_vis=2": {
+      "model": "valkyrien_mechanic:block/gas_engine_2",
+      "y": 90
+    },
+    "facing=south,power_vis=2": {
+      "model": "valkyrien_mechanic:block/gas_engine_2",
+      "y": 180
+    },
+    "facing=west,power_vis=2": {
+      "model": "valkyrien_mechanic:block/gas_engine_2",
+      "y": 270
+    },
+    "facing=north,power_vis=3": {
+      "model": "valkyrien_mechanic:block/gas_engine_3"
+    },
+    "facing=east,power_vis=3": {
+      "model": "valkyrien_mechanic:block/gas_engine_3",
+      "y": 90
+    },
+    "facing=south,power_vis=3": {
+      "model": "valkyrien_mechanic:block/gas_engine_3",
+      "y": 180
+    },
+    "facing=west,power_vis=3": {
+      "model": "valkyrien_mechanic:block/gas_engine_3",
+      "y": 270
+    }
+  }
+}

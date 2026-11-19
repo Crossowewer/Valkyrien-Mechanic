@@ -22,8 +22,6 @@ public class ModSounds
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(ValkyrienMechanic.MOD_ID, name)));
     }
 
-
-
     public static void register(IEventBus bus) {
         SOUND_EVENTS.register(bus);
     }

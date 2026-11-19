@@ -15,5 +15,7 @@ public final class ModNetwork
     public static void register()
     {
         CHANNEL.registerMessage(0, LinkPacket.class, LinkPacket::encode, LinkPacket::decode, LinkPacket::handle);
+        CHANNEL.registerMessage(1, PortUsePacket.class, PortUsePacket::encode, PortUsePacket::decode, PortUsePacket::handle);
+        CHANNEL.registerMessage(2, SeatInputPacket.class, SeatInputPacket::encode, SeatInputPacket::decode, SeatInputPacket::handle);
     }
 }

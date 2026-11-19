@@ -20,9 +20,8 @@ public class LogicButtonBlockEntity extends PortBlockEntity
         AttachFace face = state.getValue(LogicButtonBlock.FACE);
         Direction dir = state.getValue(LogicButtonBlock.FACING);
 
-        return List.of(new ConnectionSystem.Port(
+        return List.of(ConnectionSystem.Port.output(
                 0,
-                ConnectionSystem.PortType.OUTPUT,
                 ConnectionSystem.SignalType.LOGIC,
                 getX(face, dir),
                 getY(face, dir),

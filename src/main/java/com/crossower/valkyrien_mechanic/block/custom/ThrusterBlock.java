@@ -17,7 +17,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -39,13 +38,54 @@ public class ThrusterBlock extends Block implements EntityBlock
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final IntegerProperty POWER = BlockStateProperties.POWER;
+    public static final IntegerProperty GEAR = IntegerProperty.create("gear", 0, 13);
+    public static final IntegerProperty POWER_VIS = IntegerProperty.create("power_vis", 0, 3);
+    public static final int MAX_GEAR = 13;
 
+    //Block shenanigans ===========================================
     public ThrusterBlock(Properties properties)
     {
         super(properties);
-        registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(POWER, 0));
+        registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH).setValue(GEAR, 0).setValue(POWER, 0).setValue(POWER_VIS, 0));
+    }
+    @Override
+    public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, @NotNull BlockState blockState)
+    {
+        return ModBlockEntities.THRUSTER_BLOCK_ENTITY.get().create(blockPos, blockState);
+    }
+    @Override public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return PortBlockEntity.serverTicker(level);
+    }
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        super.createBlockStateDefinition(builder);
+        builder.add(FACING, GEAR, POWER, POWER_VIS);
     }
 
+    //================================================================
+
+    //Custom behaviour ===============================================
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit)
+    {
+        if (!level.isClientSide)
+        {
+            int gear = state.getValue(GEAR);
+            int next = !player.isCrouching()
+                    ? (gear >= MAX_GEAR ? 0 : gear + 1)
+                    : (gear <= 0 ? MAX_GEAR : gear - 1);
+            level.setBlock(pos, state.setValue(GEAR, next), Block.UPDATE_ALL);
+            player.displayClientMessage(Component.literal(next == 0 ? "Thruster power : OFF" : "Thruster power : " + next + "/" + MAX_GEAR), true);
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+    public static int visOf(int power) {
+        return power == 0 ? 0 : (power - 1) / 5 + 1;
+    }
+    //================================================================
+
+    //Block direction and state shenanigans =====================================
     @Override
     public @Nullable BlockState getStateForPlacement(BlockPlaceContext context)
     {
@@ -63,23 +103,8 @@ public class ThrusterBlock extends Block implements EntityBlock
             return null;
         }
 
-        int incomingRedstoneSignal = level.getBestNeighborSignal(pos);
-        return defaultBlockState()
-                .setValue(FACING, facing)
-                .setValue(POWER, incomingRedstoneSignal);
+        return defaultBlockState().setValue(FACING, facing);
     }
-
-
-    @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean isMoving)
-    {
-        if (!level.isClientSide() && level.getBlockEntity(pos) instanceof ThrusterBlockEntity thruster)
-        {
-            thruster.updatePower();
-        }
-        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, isMoving);
-    }
-
     @Override
     public void onRemove(@NotNull BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (!state.is(newState.getBlock())) {
@@ -94,7 +119,6 @@ public class ThrusterBlock extends Block implements EntityBlock
             super.onRemove(state, level, pos, newState, isMoving);
         }
     }
-
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack)
     {
@@ -106,12 +130,6 @@ public class ThrusterBlock extends Block implements EntityBlock
 
             level.setBlock(dummyPos, ModBlocks.THRUSTER_DUMMY.get().defaultBlockState().setValue(FACING, direction), Block.UPDATE_ALL);
         }
-    }
-
-    @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, @NotNull BlockState blockState)
-    {
-        return ModBlockEntities.THRUSTER_BLOCK_ENTITY.get().create(blockPos, blockState);
     }
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
@@ -130,16 +148,4 @@ public class ThrusterBlock extends Block implements EntityBlock
     {
         return RenderShape.MODEL;
     }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
-        super.createBlockStateDefinition(builder);
-        builder.add(FACING, POWER);
-    }
-
-    @Override public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return PortBlockEntity.serverTicker(level);
-    }
-
 }

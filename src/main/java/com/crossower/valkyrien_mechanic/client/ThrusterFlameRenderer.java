@@ -39,16 +39,16 @@ public class ThrusterFlameRenderer implements BlockEntityRenderer<BlockEntity>
         poseStack.pushPose();
         poseStack.translate(0.5, 0.5, 0.5);
         poseStack.mulPose(direction.getRotation());
-        poseStack.translate(0, 1.5, 0);
+        poseStack.translate(0, 1.4, 0);
 
         VertexConsumer vc = buffer.getBuffer(RenderType.lightning());
 
-        float len = (0.4f + power / 15f * 1.2f) * (1f + 0.1f * Mth.sin(blockEntity.getLevel().getGameTime() + partialTick * 2f));
+        float len = (0.4f + power / 15f * 1.5f) * (1f + 0.1f * Mth.sin(blockEntity.getLevel().getGameTime() + partialTick * 2f));
 
-        drawPlane(vc, poseStack.last().pose(), 0.35f, len);
+        drawPlane(vc, poseStack.last().pose(), 0.3f, len);
 
         poseStack.mulPose(Axis.YP.rotationDegrees(90));
-        drawPlane(vc, poseStack.last().pose(), 0.35f, len);
+        drawPlane(vc, poseStack.last().pose(), 0.3f, len);
 
         poseStack.popPose();
     }

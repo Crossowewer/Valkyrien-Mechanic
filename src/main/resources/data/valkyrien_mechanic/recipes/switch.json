@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#R",
+    "=/"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:lime_stained_glass"
+    },
+    "R": {
+      "item": "minecraft:red_stained_glass"
+    },
+    "=": {
+      "item": "minecraft:iron_ingot"
+    },
+    "/": {
+      "item": "minecraft:redstone_torch"
+    }
+  },
+  "result": {
+    "item": "valkyrien_mechanic:switch",
+    "count": 1
+  }
+}

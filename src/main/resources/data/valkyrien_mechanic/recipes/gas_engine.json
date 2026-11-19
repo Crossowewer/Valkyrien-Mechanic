@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " L ",
+    "#B#",
+    "=F="
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:lever"
+    },
+    "#": {
+      "item": "minecraft:iron_bars"
+    },
+    "B": {
+      "item": "minecraft:blast_furnace"
+    },
+    "=": {
+      "item": "minecraft:iron_ingot"
+    },
+    "F": {
+      "item": "minecraft:flint_and_steel"
+    }
+  },
+  "result": {
+    "item": "valkyrien_mechanic:gas_engine",
+    "count": 1
+  }
+}

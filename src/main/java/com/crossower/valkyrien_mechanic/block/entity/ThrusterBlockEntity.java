@@ -16,6 +16,7 @@ import org.valkyrienskies.mod.api.BlockEntityPhysicsListener;
 import org.valkyrienskies.mod.common.util.VectorConversionsMCKt;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.crossower.valkyrien_mechanic.block.custom.ThrusterBlock.FACING;
 import static com.crossower.valkyrien_mechanic.block.custom.ThrusterBlock.POWER;
@@ -24,7 +25,11 @@ import static net.minecraft.world.level.block.Block.UPDATE_ALL;
 public class ThrusterBlockEntity extends PortBlockEntity implements BlockEntityPhysicsListener
 {
 
-    private static final List<ConnectionSystem.Port> PORTS = List.of(new ConnectionSystem.Port(0, ConnectionSystem.PortType.INPUT, ConnectionSystem.SignalType.LOGIC, 0.5f,0.5f, 0.5f));
+    private static final List<ConnectionSystem.Port> PORTS = List.of(ConnectionSystem.Port.input(
+            0, ConnectionSystem.SignalType.THRUSTER,
+            Set.of(ConnectionSystem.SignalType.LOGIC,
+                    ConnectionSystem.SignalType.CONTROL_SEAT),
+            0.5f,0.5f, 0.5f));
 
     @Override
     public List<ConnectionSystem.Port> getPorts() { return PORTS; }
@@ -49,26 +54,29 @@ public class ThrusterBlockEntity extends PortBlockEntity implements BlockEntityP
         physShip.applyModelForce(force, VectorConversionsMCKt.toJOML(worldPosition.getCenter()));
     }
     @Override
+    public void serverTick()
+    {
+        super.serverTick();
+        if (level == null || level.isClientSide) return;
+
+        BlockState s = getBlockState();
+        int gear = Math.min(s.getValue(ThrusterBlock.GEAR), ThrusterBlock.MAX_GEAR);
+        boolean active = !isSignalControlled(0) || input > 0.5f;
+        int target = active ? gear : 0;
+        int vis = ThrusterBlock.visOf(target);
+
+        if (s.getValue(ThrusterBlock.POWER) != target || s.getValue(ThrusterBlock.POWER_VIS) != vis)
+            level.setBlock(worldPosition, s.setValue(ThrusterBlock.POWER, target).setValue(ThrusterBlock.POWER_VIS, vis), Block.UPDATE_ALL);
+    }
+
+    @Override
     public void setDimension(@NotNull String s)
     {
 
     }
 
-    private int signalPower = 0;
-
+    private float input = 0f;
     @Override protected void onInputChanged(int portId, float value) {
-        if (portId != 0) return;
-        signalPower = value > 0.5f ? 15 : 0;
-        updatePower();
-    }
-
-    public void updatePower()
-    {
-        if (level == null || level.isClientSide) return;
-        int target = Math.max(level.getBestNeighborSignal(worldPosition), signalPower);
-        BlockState state = getBlockState();
-        if (state.getValue(ThrusterBlock.POWER) != target) {
-            level.setBlock(worldPosition, state.setValue(ThrusterBlock.POWER, target), Block.UPDATE_ALL);
-        }
+        if (portId == 0) input = value;
     }
  }

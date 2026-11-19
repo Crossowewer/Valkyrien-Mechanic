@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "valkyrien_mechanic:thruster",
+    "valkyrien_mechanic:gas_engine",
+    "valkyrien_mechanic:seat",
+    "valkyrien_mechanic:thruster_dummy"
+  ]
+}

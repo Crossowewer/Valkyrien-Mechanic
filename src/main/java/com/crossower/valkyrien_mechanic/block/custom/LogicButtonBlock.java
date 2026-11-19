@@ -39,26 +39,26 @@ public class LogicButtonBlock extends FaceAttachedHorizontalDirectionalBlock imp
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
 
+    //Block shenanigans ==========================
     public LogicButtonBlock(Properties properties)
     {
         super(properties);
         registerDefaultState((BlockState)((BlockState)((BlockState)((BlockState)this.stateDefinition.any()).setValue(FACING, Direction.NORTH).setValue(POWERED, false))).setValue(FACE, AttachFace.WALL));
     }
-
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, @NotNull BlockState state)
     {
         return ModBlockEntities.LOGIC_BUTTON_BLOCK_ENTITY.get().create(pos, state);
     }
-
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(POWERED);
         builder.add(new Property[]{FACE, FACING});
     }
+    //=============================================
 
-
+    //Custom behaviour =================
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if(!level.isClientSide) {
             this.press(state, level, pos, 5);
@@ -70,7 +70,6 @@ public class LogicButtonBlock extends FaceAttachedHorizontalDirectionalBlock imp
         }
         return InteractionResult.sidedSuccess(level.isClientSide);
     }
-
     public void press(BlockState state, Level level, BlockPos pos, int ticks) {
         long targeetPressTime = level.getGameTime() + ticks;
         if (level.getBlockEntity(pos) instanceof LogicButtonBlockEntity be) {
@@ -83,7 +82,6 @@ public class LogicButtonBlock extends FaceAttachedHorizontalDirectionalBlock imp
         }
         level.scheduleTick(pos, this, ticks);
     }
-
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (state.getValue(POWERED))
@@ -102,7 +100,9 @@ public class LogicButtonBlock extends FaceAttachedHorizontalDirectionalBlock imp
             }
         }
     }
+    //==============================================================
 
+    //Block direction and states shenanigans =======================
     protected static final VoxelShape NORTH_AABB;
     protected static final VoxelShape SOUTH_AABB;
     protected static final VoxelShape WEST_AABB;

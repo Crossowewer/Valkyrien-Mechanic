@@ -1,6 +1,7 @@
 package com.crossower.valkyrien_mechanic.block.custom;
 
 import com.crossower.valkyrien_mechanic.block.PortBlockEntity;
+import com.crossower.valkyrien_mechanic.block.entity.BearingBlockEntity;
 import com.crossower.valkyrien_mechanic.block.entity.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,29 +23,37 @@ import org.jetbrains.annotations.Nullable;
 
 public class BearingBlock extends FaceAttachedHorizontalDirectionalBlock implements EntityBlock
 {
-
+    //Block shenanigans =============================================
     public BearingBlock(Properties properties)
     {
         super(properties);
     }
-
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState)
     {
         return ModBlockEntities.BEARING_BLOCK_ENTITY.get().create(blockPos, blockState);
     }
-
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(new Property[]{FACE, FACING});
     }
-
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return PortBlockEntity.serverTicker(level);
     }
 
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+    {
+        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof BearingBlockEntity be) {
+            be.removeJoint();
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
+    }
+    //================================================================
+
+    //Block shape and direction shenanigans ==========================
     public static Direction getHeadDirection(BlockState state) {
         return getConnectedDirection(state);
     }

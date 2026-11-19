@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "="
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:yellow_wool"
+    },
+    "=": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "valkyrien_mechanic:seat",
+    "count": 1
+  }
+}

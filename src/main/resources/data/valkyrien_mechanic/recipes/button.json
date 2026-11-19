@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " #",
+    "=/"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:yellow_stained_glass"
+    },
+    "=": {
+      "item": "minecraft:iron_ingot"
+    },
+    "/": {
+      "item": "minecraft:redstone_torch"
+    }
+  },
+  "result": {
+    "item": "valkyrien_mechanic:button",
+    "count": 1
+  }
+}

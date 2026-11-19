@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " . ",
+    "#M#",
+    "IFI"
+  ],
+  "key": {
+    ".": {
+      "item": "minecraft:redstone"
+    },
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "M": {
+      "item": "minecraft:magma_cream"
+    },
+    "I": {
+      "item": "minecraft:iron_bars"
+    },
+    "F": {
+      "item": "minecraft:flint_and_steel"
+    }
+  },
+  "result": {
+    "item": "valkyrien_mechanic:thruster",
+    "count": 1
+  }
+}

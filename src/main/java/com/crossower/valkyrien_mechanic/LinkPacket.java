@@ -33,3 +33,4 @@ public record LinkPacket(ConnectionSystem.PortRef a, @Nullable ConnectionSystem.
     private static void write(FriendlyByteBuf buf, ConnectionSystem.PortRef r) {buf.writeBlockPos(r.pos()); buf.writeVarInt(r.id());}
     private static ConnectionSystem.PortRef read(FriendlyByteBuf buf) {return new ConnectionSystem.PortRef(buf.readBlockPos(), buf.readVarInt());}
 }
+

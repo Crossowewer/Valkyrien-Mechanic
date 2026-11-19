@@ -11,7 +11,7 @@ authors = "${mod_authors}"
 description = '''
 ${mod_description}
 '''
-logoFile = "icon.png"
+logoFile = "logo.png"
 
 [[dependencies.${ mod_id }]]
 modId = "forge"
@@ -30,6 +30,6 @@ side = "BOTH"
 [[dependencies.${ mod_id }]]
 modId = "valkyrienskies"
 mandatory = true
-versionRange = "[2.4.0,)"
+versionRange = "[2.4.11,)"
 ordering = "AFTER"
 side = "BOTH"

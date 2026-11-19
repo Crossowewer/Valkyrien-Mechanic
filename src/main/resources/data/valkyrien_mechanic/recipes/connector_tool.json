@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#S#",
+    "=R=",
+    " / "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:yellow_dye"
+    },
+    "S": {
+      "item": "minecraft:stone_button"
+    },
+    "=": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:repeater"
+    },
+    "/": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "valkyrien_mechanic:connector_tool",
+    "count": 1
+  }
+}

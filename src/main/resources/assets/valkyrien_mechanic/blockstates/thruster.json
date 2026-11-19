@@ -1,28 +1,31 @@
 {
-  "multipart": [
-    {
-      "when": { "facing": "north" },
-      "apply": { "model": "valkyrien_mechanic:block/thruster" }
-    },
-    {
-      "when": { "facing": "east" },
-      "apply": { "model": "valkyrien_mechanic:block/thruster", "y": 90 }
-    },
-    {
-      "when": { "facing": "south" },
-      "apply": { "model": "valkyrien_mechanic:block/thruster", "y": 180 }
-    },
-    {
-      "when": { "facing": "west" },
-      "apply": { "model": "valkyrien_mechanic:block/thruster", "y": 270 }
-    },
-    {
-      "when": { "facing": "up" },
-      "apply": { "model": "valkyrien_mechanic:block/thruster", "x": -90 }
-    },
-    {
-      "when": { "facing": "down" },
-      "apply": { "model": "valkyrien_mechanic:block/thruster", "x": 90 }
-    }
-  ]
+  "variants": {
+    "facing=north,power_vis=0": { "model": "valkyrien_mechanic:block/thruster_0" },
+    "facing=east,power_vis=0": { "model": "valkyrien_mechanic:block/thruster_0", "y": 90 },
+    "facing=south,power_vis=0": { "model": "valkyrien_mechanic:block/thruster_0", "y": 180 },
+    "facing=west,power_vis=0": { "model": "valkyrien_mechanic:block/thruster_0", "y": 270 },
+    "facing=up,power_vis=0": { "model": "valkyrien_mechanic:block/thruster_0", "x": 270 },
+    "facing=down,power_vis=0": { "model": "valkyrien_mechanic:block/thruster_0", "x": 90 },
+
+    "facing=north,power_vis=1": { "model": "valkyrien_mechanic:block/thruster_1" },
+    "facing=east,power_vis=1": { "model": "valkyrien_mechanic:block/thruster_1", "y": 90 },
+    "facing=south,power_vis=1": { "model": "valkyrien_mechanic:block/thruster_1", "y": 180 },
+    "facing=west,power_vis=1": { "model": "valkyrien_mechanic:block/thruster_1", "y": 270 },
+    "facing=up,power_vis=1": { "model": "valkyrien_mechanic:block/thruster_1", "x": 270 },
+    "facing=down,power_vis=1": { "model": "valkyrien_mechanic:block/thruster_1", "x": 90 },
+
+    "facing=north,power_vis=2": { "model": "valkyrien_mechanic:block/thruster_2" },
+    "facing=east,power_vis=2": { "model": "valkyrien_mechanic:block/thruster_2", "y": 90 },
+    "facing=south,power_vis=2": { "model": "valkyrien_mechanic:block/thruster_2", "y": 180 },
+    "facing=west,power_vis=2": { "model": "valkyrien_mechanic:block/thruster_2", "y": 270 },
+    "facing=up,power_vis=2": { "model": "valkyrien_mechanic:block/thruster_2", "x": 270 },
+    "facing=down,power_vis=2": { "model": "valkyrien_mechanic:block/thruster_2", "x": 90 },
+
+    "facing=north,power_vis=3": { "model": "valkyrien_mechanic:block/thruster_3" },
+    "facing=east,power_vis=3": { "model": "valkyrien_mechanic:block/thruster_3", "y": 90 },
+    "facing=south,power_vis=3": { "model": "valkyrien_mechanic:block/thruster_3", "y": 180 },
+    "facing=west,power_vis=3": { "model": "valkyrien_mechanic:block/thruster_3", "y": 270 },
+    "facing=up,power_vis=3": { "model": "valkyrien_mechanic:block/thruster_3", "x": 270 },
+    "facing=down,power_vis=3": { "model": "valkyrien_mechanic:block/thruster_3", "x": 90 }
+  }
 }

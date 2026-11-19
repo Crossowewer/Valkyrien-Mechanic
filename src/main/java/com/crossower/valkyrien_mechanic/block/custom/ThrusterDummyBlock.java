@@ -27,27 +27,38 @@ public class ThrusterDummyBlock extends Block
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 16, 16);
 
-
-
+    //Block shenanigans=============================================
     public ThrusterDummyBlock(Properties properties)
     {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+    {
+        builder.add(FACING);
+    }
+    //==============================================================
 
+    //Block shape =======================================================
+    @Override
+    public RenderShape getRenderShape(BlockState state)
+    {
+        return RenderShape.INVISIBLE;
+    }
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
         return SHAPE;
     }
-
-
-
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
     {
         return this.getShape(state, level, pos, context);
     }
+    //===================================================================
+
+    //Block state ======================================
     @Override
     public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
         return 1.0F;
@@ -57,28 +68,14 @@ public class ThrusterDummyBlock extends Block
     {
         return Shapes.empty();
     }
-
     public boolean useShapeForLightOcclusion(BlockState state)
     {
         return false;
     }
-
     @Override
     public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos) {
         return true;
     }
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-    {
-        builder.add(FACING);
-    }
-
-    @Override
-    public RenderShape getRenderShape(BlockState state)
-    {
-        return RenderShape.INVISIBLE;
-    }
-
     @Override
     public void initializeClient(Consumer<IClientBlockExtensions> consumer)
     {
@@ -97,6 +94,7 @@ public class ThrusterDummyBlock extends Block
             }
         });
     }
+    //==================================================
 
     @Override
     public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state){

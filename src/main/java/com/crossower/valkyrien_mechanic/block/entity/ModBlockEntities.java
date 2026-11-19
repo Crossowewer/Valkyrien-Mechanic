@@ -3,6 +3,7 @@ package com.crossower.valkyrien_mechanic.block.entity;
 import com.crossower.valkyrien_mechanic.ValkyrienMechanic;
 import com.crossower.valkyrien_mechanic.block.ModBlocks;
 import com.crossower.valkyrien_mechanic.block.custom.BearingBlock;
+import com.crossower.valkyrien_mechanic.block.custom.GasEngineBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -33,6 +34,16 @@ public class ModBlockEntities
     public static final RegistryObject<BlockEntityType<BearingBlockEntity>> BEARING_BLOCK_ENTITY =
             BLOCK_ENTITIES.register("bearing_block_entity",
                     () -> BlockEntityType.Builder.of(BearingBlockEntity::new, ModBlocks.BEARING.get())
+                            .build(null));
+
+    public static final RegistryObject<BlockEntityType<GasEngineBlockEntity>> GAS_ENGINE_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("gas_engine_block_entity",
+                    () -> BlockEntityType.Builder.of(GasEngineBlockEntity::new, ModBlocks.GAS_ENGINE.get())
+                            .build(null));
+
+    public static final RegistryObject<BlockEntityType<SeatBlockEntity>> SEAT_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("seat_block_entity",
+                    () -> BlockEntityType.Builder.of(SeatBlockEntity::new, ModBlocks.SEAT.get())
                             .build(null));
 
     public static void register(IEventBus eventBus)

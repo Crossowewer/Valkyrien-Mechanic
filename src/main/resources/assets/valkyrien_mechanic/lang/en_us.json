@@ -5,6 +5,40 @@
   "block.valkyrien_mechanic.switch": "Switch",
   "block.valkyrien_mechanic.button": "Button",
   "block.valkyrien_mechanic.bearing": "Bearing",
+  "block.valkyrien_mechanic.gas_engine": "Gas engine",
+  "block.valkyrien_mechanic.seat": "Seat",
 
-  "creativetab.mechanic_tab": "Valkyrien Mechanic"
+  "creativetab.mechanic_tab": "Valkyrien Mechanic",
+
+    "tooltip.valkyrien_mechanic.shift_hint": "Hold §eShift§7 §8for details",
+
+    "tooltip.valkyrien_mechanic.thruster.summary": "Rocket thruster for creations",
+    "tooltip.valkyrien_mechanic.thruster.detail1": "> 13 power levels, each 1.5× stronger",
+    "tooltip.valkyrien_mechanic.thruster.detail2": "> Right click: next level, crouch + right click: previous",
+    "tooltip.valkyrien_mechanic.thruster.detail3": "> Inputs switch, button and seat",
+
+    "tooltip.valkyrien_mechanic.bearing.summary": "Rotates a ship placed on it around it's axis",
+    "tooltip.valkyrien_mechanic.bearing.detail1": "> Shipifies the block you place on it and makes a bearing connection",
+    "tooltip.valkyrien_mechanic.bearing.detail2": "> Inputs engine or seat",
+    "tooltip.valkyrien_mechanic.bearing.detail3": "> Rotates freely without input",
+    "tooltip.valkyrien_mechanic.bearing.detail4": "> RMB it's port with connector tool to change direction (affects input)",
+
+    "tooltip.valkyrien_mechanic.gas_engine.summary": "Rotates a bearing when connected and turned on",
+    "tooltip.valkyrien_mechanic.gas_engine.detail1": "> 13 power levels, each 1.5× stronger",
+    "tooltip.valkyrien_mechanic.gas_engine.detail2": "> Inputs switch, button, seat",
+    "tooltip.valkyrien_mechanic.gas_engine.detail3": "> Outputs into bearing",
+
+    "tooltip.valkyrien_mechanic.seat.summary": "A seat to control your creation",
+    "tooltip.valkyrien_mechanic.seat.detail1": "> W A S D to control outputs",
+    "tooltip.valkyrien_mechanic.seat.detail2": "> Outputs into engine, bearing, thruster",
+    "tooltip.valkyrien_mechanic.seat.detail3": "> Connected bearings will comply to A D and rotate 35 degrees in according direction",
+    "tooltip.valkyrien_mechanic.seat.detail4": "> Connected engines will comply to W S and rotate in according direction",
+
+    "tooltip.valkyrien_mechanic.connector_tool.summary": "The heart of this mod! Connects interactive blocks in convenient fashion",
+    "tooltip.valkyrien_mechanic.connector_tool.detail1": "> LMB to drag connection from one port to another",
+    "tooltip.valkyrien_mechanic.connector_tool.detail2": "> RMB to interact with a port and change it's properties",
+
+  "tooltip.valkyrien_mechanic.switch.summary": "A logic output",
+
+  "tooltip.valkyrien_mechanic.button.summary": "A logic output"
 }
